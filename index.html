@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body class="body bg-success ">
+    <h1 class="h2 text-center mt-2 text-white fw-bold">Movies</h1>
+
+    <main>
+
+        <form class="form-movie d-flex align-items-center justify-content-center mb-5" action="#" method="post">
+            <input class="input-movie" type="search" placeholder="search" aria-label="search movie">
+
+        </form>
+        <div class="container row">
+            <div class="card shadow-lg p-3 mb-5 bg-body rounded col" style="width: 18rem;">
+
+                <!-- <img class="wrapper-img card" src="" alt=""> -->
+                <div class="card-body">
+
+                    <ul class="wrapper-list p-0 list-unstyled ">
+                        <li class="wrapper-item">
+                            <h3 class="wrapper-title h4 fw-bold"></h3>
+                            <h4 class="wrapper-titule h4 fw-bold"> </h4>
+
+                            <p class="wrapper-year fs-3 lh-1"></p>
+
+                            <p class="wrapper-categories fs-3 lh-1"></p>
+
+                            <p class="wrapper-summary fs-3 lh-1"></p>
+
+                            <p class="wrapper-rating fs-3 lh-1"></p>
+
+                            <p class="wrapper-rountime fs-3 lh-1"></p>
+
+                            <p class="wrapper-language fs-3 lh-1"></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        </div>
+    </main>
+
+
+
+
+
+    <template id="wrapper-template">
+
+        <li class="wrapper-item bg-info mb-5">
+            <img class="wrapper-img card" src="" alt="">
+            <div class="card-body">
+
+                <h3 class="wrapper-title h4 fw-bold">Name</h3>
+                <h4 class="wrapper-titule h4 fw-bold">Last Name</h4>
+
+                <p class="wrapper-year fs-3 lh-1">Year</p>
+
+                <p class="wrapper-categories fs-3 lh-1">Cotegories</p>
+
+                <p class="wrapper-summary fs-3 lh-1">Summary</p>
+
+                <p class="wrapper-rating fs-3 lh-1">rating</p>
+
+                <p class="wrapper-runtime fs-3 lh-1">rountime</p>
+
+                <p class="wrapper-language fs-3 lh-1">Language</p>
+            </div>
+        </li>
+
+
+    </template>
+    <script src="js/movies.js"></script>
+    <script src="js/function.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
