@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 
-<body class="body bg-success ">
+<body class="body bg-secondary">
     <h1 class="h2 text-center mt-2 text-white fw-bold">Movies</h1>
 
     <main>
@@ -17,13 +17,28 @@
         <form class="form-movie d-flex align-items-center justify-content-center mb-5" action="#" method="post">
             <input class="input-movie" type="search" placeholder="search" aria-label="search movie">
 
+            <input class="input-reting " placeholder="rating" aria-label="rating movie" type="number">
+        </form>
+        <form id="form-sort" class="d-flex align-items-center justify-content-center mb-5" method="get" action="#">
+            <label class="label-sort text-white" for="sort">Sort by</label>
+            <select name="form-select" id="sort">
+                <option value="1">all</option>
+            </select>
+
+            <select id="select-categies" name="sort-categories">
+                <label for="select-categies">Choice</label>
+                <input class="select-categoties" type="text">
+                <option value="1">low rating</option>
+                <option value="2">high rating level</option>
+            </select>
+            <button class="btn btn-secondary"> Click</button>
         </form>
         <div class="container row">
             <div class="card shadow-lg p-3 mb-5 bg-body rounded col" style="width: 18rem;">
 
                 <!-- <img class="wrapper-img card" src="" alt=""> -->
                 <div class="card-body">
-
+                    <img class="wrapper-img" src="" alt="">
                     <ul class="wrapper-list p-0 list-unstyled ">
                         <li class="wrapper-item">
                             <h3 class="wrapper-title h4 fw-bold"></h3>
@@ -57,7 +72,7 @@
     <template id="wrapper-template">
 
         <li class="wrapper-item bg-info mb-5">
-            <img class="wrapper-img card" src="" alt="">
+            <img class="card-img-top" src="" alt="">
             <div class="card-body">
 
                 <h3 class="wrapper-title h4 fw-bold">Name</h3>
@@ -74,6 +89,7 @@
                 <p class="wrapper-runtime fs-3 lh-1">rountime</p>
 
                 <p class="wrapper-language fs-3 lh-1">Language</p>
+                <a href="#" target="_blank" class="btn btn-danger text-white">Watch to Video</a>
             </div>
         </li>
 

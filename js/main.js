@@ -1,5 +1,5 @@
 //splice qilib faqat 1000 taasini olindi
-
+movies.splice(10)
 
 //document dan olib kelingan elementlar
 const wrapperTemplate = document.querySelector("#wrapper-template").content;
@@ -8,24 +8,27 @@ const cardBody = movieCard.querySelector(".card-body");
 const wrapperUl = document.querySelector(".wrapper-list");
 
 const elForm = document.querySelector(".form-movie");
-const elInput = document.querySelector(".input-movie");
+const elSearchInput = document.querySelector(".input-movie");
 
-//har birini tartib ga solindi
+const elRatingInput = elForm.querySelector(".input-reting");
+const elSortForm = document.querySelector("#form-sort");
+
+
+//har birini tartib ga solish
 
 const normolizedList = movies.map((kino) => {
     return {
-        // img: kino.ImageURL,
         title: kino.Title,
         fullTitle: kino.fulltitle,
         movieYear: kino.movie_year,
-        Categories: kino.Categories,
+        categories: kino.Categories.split("|").join(", "),
         summary: kino.summary,
-        Img: kino.ImageURL,
-        imgId: kino.imdb_id,
-        rating: kino.imdb_rating,
+        imgRating: kino.imdb_rating,
         runtime: kino.runtime,
         language: kino.language,
-        ytid: kino.ytid,
+        trailer: `https://www.youtube.com/watch?v=${kino.ytid}`,
+        smallPoster: `http://i3.ytimg.com/vi/${kino.ytid}/hqdefault.jpg`,
+        bigPoster: `https://i3.ytimg.com/vi/${kino.ytid}/maxresdefault.jpg`,
     }
 })
 
@@ -36,15 +39,18 @@ const createMovie = (movie) => {
 
     //image si ohshamadi ustoz
 
-    // $(".wrapper-img", elMovieLi).src = "https://hydramovies.com/wp-content/uploads/2018/04/New-York-Doll-Movie-Poster.jpg";
-    $(".wrapper-title", elMovieLi).textContent = movie.Title;
+    
+    $(".wrapper-title", elMovieLi).textContent = movie.title;
+    $(".card-img-top", elMovieLi).src = movie.smallPoster;
+    $(".card-img-top", elMovieLi).alt = movie.title;
     $(".wrapper-titule", elMovieLi).textContent = movie.fulltitle;
     $(".wrapper-year", elMovieLi).textContent = movie.movie_year;
-    $(".wrapper-categories", elMovieLi).textContent = movie.Categories;
+    $(".wrapper-categories", elMovieLi).textContent = movie.categories;
     $(".wrapper-summary", elMovieLi).textContent = movie.summary;
     $(".wrapper-rating", elMovieLi).textContent = movie.rating;
     $(".wrapper-runtime", elMovieLi).textContent = movie.runtime;
     $(".wrapper-language", elMovieLi).textContent = movie.language;
+    $(".btn-danger", elMovieLi).href = movie.trailer;
 
     return elMovieLi;
 }
@@ -65,17 +71,57 @@ renderMovies(normolizedList);
 
 
 
-elForm.addEventListener("input", (evt) => {
-    evt.preventDefault();
-    
-    const elInputSearch = new RegExp(elInput.value.trim(), "gi");
 
-    let searchResult = normolizedList.filter((movie) => { 
-        if(movie.title.match(elInputSearch)) {
+
+elForm.addEventListener("submit", (evt) => {
+    evt.preventDefault();
+        
+    const elInputSearch = new RegExp(elSearchInput.value.trim(), "gi");
+    
+    const searchResult = normolizedList.filter((movie) => { 
+        if(movie.title.toString().match(elInputSearch)) {
+            // console.log("bitta si chiqvott");
             return movie.title.match(elInputSearch);
         }
         
     })
     renderMovies(searchResult);
-})
 
+    // const elRatingInput = elRatingInput.value.toString();
+
+    // const elRatingInputResult = normolizedList.filter((movie) => {
+    //     if (movie.imgRating < 7) {
+    //         return elRatingInput;
+    //     }
+    // })
+        
+});
+
+elSortForm.addEventListener("submit", (evt) => {
+    evt.preventDefault();
+
+    const elements = evt.target.elements;
+
+    const sortValue = elements.sort.value
+    
+    movies.sort(function(a, b) {
+        switch (sortValue) {
+            case "1":
+                if(a.Categories > b.Categories) {
+                    return 1;
+
+                } else if(a.Categories < b.Categories) {
+                return -1;
+
+                } else {
+                    return 0
+                }
+            case"2": 
+                return b.Categories - a.Categories;     
+                break;
+            default:
+                break;
+        }
+        renderMovies(normolizedList)
+    })
+})
