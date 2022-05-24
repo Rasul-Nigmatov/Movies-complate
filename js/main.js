@@ -1,5 +1,5 @@
 //splice qilib faqat 1000 taasini olindi
-movies.splice(10)
+movies.splice(100)
 
 //document dan olib kelingan elementlar
 const wrapperTemplate = document.querySelector("#wrapper-template").content;
@@ -9,16 +9,15 @@ const wrapperUl = document.querySelector(".wrapper-list");
 
 const elForm = document.querySelector(".form-movie");
 const elSearchInput = document.querySelector(".input-movie");
-
-const elRatingInput = elForm.querySelector(".input-reting");
-const elSortForm = document.querySelector("#form-sort");
+const selectCategories = elForm.querySelector("#categories");
+const sortSelect = elForm.querySelector("#modes")
 
 
 //har birini tartib ga solish
 
 const normolizedList = movies.map((kino) => {
     return {
-        title: kino.Title,
+        title: kino.Title.toString(),
         fullTitle: kino.fulltitle,
         movieYear: kino.movie_year,
         categories: kino.Categories.split("|").join(", "),
@@ -31,7 +30,6 @@ const normolizedList = movies.map((kino) => {
         bigPoster: `https://i3.ytimg.com/vi/${kino.ytid}/maxresdefault.jpg`,
     }
 })
-
 //template orqali ishlatilgan elementlar 
 
 const createMovie = (movie) => {
@@ -65,63 +63,139 @@ const renderMovies = (movies) => {
     })
     wrapperUl.appendChild(resultMovieFragment);
 }
-//va js da mashi function ishga tushurish
-renderMovies(normolizedList);
 
+//form olib kevolib qidiruvga bergandan song value dagini topib beradi
 
-
-
-
-
-elForm.addEventListener("submit", (evt) => {
+elSearchInput.addEventListener("input", (evt) => {
     evt.preventDefault();
         
     const elInputSearch = new RegExp(elSearchInput.value.trim(), "gi");
     
-    const searchResult = normolizedList.filter((movie) => { 
-        if(movie.title.toString().match(elInputSearch)) {
-            // console.log("bitta si chiqvott");
-            return movie.title.match(elInputSearch);
-        }
-        
+    const searchResult = normolizedList.filter((movies) => { 
+        if(movies.title.match(elInputSearch)) {
+            return movies.title.match(elInputSearch);
+        }  
     })
-    renderMovies(searchResult);
-
-    // const elRatingInput = elRatingInput.value.toString();
-
-    // const elRatingInputResult = normolizedList.filter((movie) => {
-    //     if (movie.imgRating < 7) {
-    //         return elRatingInput;
-    //     }
-    // })
-        
+    console.log(searchResult);
+    
+    renderMovies(searchResult); 
 });
 
-elSortForm.addEventListener("submit", (evt) => {
+// har bitt categories topib kelish function
+
+const movieCategories = [];
+const categoriesEveryone = () => {
+
+normolizedList.splice(50).forEach((movie) => {
+    movie.categories.split(", ").forEach(function(category) {
+        if(!movieCategories.includes(category)) {
+            movieCategories.push(category);
+        }
+    })
+    movieCategories.unshift("All");
+    return movieCategories;
+})
+}
+
+categoriesEveryone();
+
+//cotegory da option yaratish template orqali
+
+movieCategories.forEach((categories) => {
+    const optionNew = document.createElement("option");
+    optionNew.textContent = categories;
+    optionNew.value = categories;
+    optionNew.name = categories;
+
+    selectCategories.append(optionNew);
+
+}) 
+
+//forEach orqali function bilan ishlab qidirish
+
+const categoriesSearch = function() {
+    const i = [];
+
+    normolizedList.forEach((movie) => {
+        const arrayCategories = movie.categories.split(", ");
+        if (arrayCategories.includes(selectCategories.value)) {
+            i.push(movie)
+        }
+    })
+
+    return i;
+}
+
+
+//function A-Z gacha bo`lgan tartib va uning option elementlar orqali chiqarish
+
+const procedureValue = ["A-Z", "Z-A", "Reyting =>", "Reyting <=" ];
+
+for(let j = 0; j <= procedureValue.length; j++) {
+    const sortElOption = document.createElement("option");
+    sortElOption.textContent = procedureValue[j];
+    sortElOption.value = procedureValue[j];
+
+}
+
+
+selectCategories.addEventListener("change", (evt) => {
     evt.preventDefault();
 
-    const elements = evt.target.elements;
-
-    const sortValue = elements.sort.value
-    
-    movies.sort(function(a, b) {
-        switch (sortValue) {
-            case "1":
-                if(a.Categories > b.Categories) {
-                    return 1;
-
-                } else if(a.Categories < b.Categories) {
-                return -1;
-
-                } else {
-                    return 0
-                }
-            case"2": 
-                return b.Categories - a.Categories;     
-                break;
-            default:
-                break;
-        }
-        renderMovies(normolizedList)
-    })
+    renderMovies(categoriesSearch());
+    if (selectCategories.value == "All") {
+        renderMovies(normolizedList);
+    }
 })
+
+sortSelect.addEventListener("change", (evt) => {
+    evt.preventDefault();
+
+    const arrSort = [];
+    const sortTitleReyting = [];
+
+    if(sortSelect.value == "A-Z") {
+        normolizedList.forEach((kino) => {
+            arrSort.push(kino.title);
+        })
+        arrSort.sort();
+
+        arrSort.forEach((title) => {
+            normolizedList.forEach((a) => {
+                if(a.title == title) {
+                    sortTitleReyting.push(a)
+                }
+            })
+        })
+    }else if(sortSelect.value == "Z-A") {
+        normolizedList.forEach((kino) => {
+            arrSort.push(kino.title);
+        })
+    }   arrSort.sort().reverse();
+    
+    arrSort.forEach((title) => {
+        normolizedList.forEach((a) => {
+            if(a.title == title) {
+                sortTitleReyting.push(a);
+            }else if (sortSelect.value == "Reyting =>") {
+                normolizedList.forEach((kino) => {
+                    arrSort.push(kino.imgRating);
+                })
+            }
+        })
+        arrSort.sort(function(a, b) {
+            return a - b
+        })
+    })
+    arrSort.forEach((reyting) => {
+        normolizedList.forEach((film) => {
+            if (film.imgRating == reyting && !sortTitleReyting.includes(film)) {
+                sortTitleReyting.push(film)
+            }
+        })
+    }) 
+    renderMovies(sortTitleReyting)
+    console.log(sortTitleReyting);
+})  
+
+
